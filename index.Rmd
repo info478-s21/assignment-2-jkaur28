@@ -4,6 +4,96 @@ output: html_document
 ---
 Write your report here using _markdown_. I **strongly suggest** you do your analysis in the `analysis.R` file, and the `source()` your results into this script to write your report. 
 
-```{r cars}
-# Example code block
+```{r setup, include=FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+source("analysis.R")
 ```
+## Tuberculosis
+
+The first part of the assignment uses the **BCG** dataset from the **HSAUR** package. It contains the results from 13 different studies that assess the effectiveness of the Bacillus Calmette–Guérin vaccine in preventing Tuberculosis. 
+
+> The histogram below represents the distribution of the odds ratios over all 13
+studies. This shows that for 11 out of the 13 cases the odds of a TB patient not
+being vaccinated was more than the odds of a TB patient who got vaccinated. 
+
+```{r oddsRatio, echo=FALSE}
+hist(oddsRatio, col='blue', main= "Odds ratios of BCG vaccine and occurences of TB for the 13 studies")
+```
+
+**Relationship between Odds Ratios and Years**
+
+
+```{r yearsplot, echo=FALSE}
+ plot(years, oddsRatio, main="Odds ratios over years", col='dark green')
+```
+
+> In this graph, we can see a positive relation between time and odds ratios, with a few outliers. That is, over time, the odds of a TB patient being vaccinated has increased. This might mean that the effectiveness of the vaccine is decreasing. In around 1970, there was the odds ratio is much higher than the other entries. This might be because of a TB outbreak durng that time. 
+
+
+**Relationship between Odds Ratios and Latitudes**
+
+
+```{r latitudesplot, echo=FALSE}
+plot(latitudes, oddsRatio, main="Odds ratios over latitudes", col='red')
+```
+
+> In this graph, we can see a negative relation between latitudes and odds ratios, with some outliers. The latitudes represent the distance from the equator. Therefore, the closer the place is to the equator, that is, the hotter it is, the higher the odds of the having TB having recieved a vaccine. 
+
+After evaluating the graph, it is seen that the value fo the odds ratio is generally less than 1. This means that the odds of a TB patient, getting vaccinated are less than the odds a TB patient not getting vaccinated. Therefore, _generally_, the BCG vaccination is effective in preventing Tuberculosis. 
+
+**Relationship between Odds Ratios and Relative Risk**
+
+
+```{r plot3, echo=FALSE}
+  ggplot(data_for_plot) +
+  geom_point(mapping = aes(x = oddsRatio, y = relative_ratios)) +
+  labs(
+    title = "Odds Ratios vs Relative Risks",
+    x = "Odds Ratio",
+    y = "Relative Risk"
+  )
+```
+
+
+> The graph above represents a scatter plot of the relationship between odds ratios and relative risks for all 13 studies. They show a very strogn positive correlation. This is because both are different ways of measuring risks.
+
+## Low Birth Weight
+
+This part of the assignment uses the **birthwt** dataset from the **MASS** package. It contains information about the mothers of children, and the birth-weight of those children. Upon analyzing the data further, I found:
+
+* The average birth weight of children is **`r mean_bwt`** grams.
+* The proportion of children born with weight less than 2.5kgs is **`r low_bwt_proportion`**.
+* The average weight of mothers at last menstrual period is **`r mean_mwt`** pounds.
+* The proportion of mothers who were smoking during pregnancy is **`r smokers_proportion`**.
+* The median of number of prenatal health care visits is **`r median_visits`**.
+
+The table below shows the relative risks of having a low-birth weight infant based on different input variables.
+
+```{r relativerisks, echo=FALSE}
+library(knitr)
+kable(df, col.names = c("Exposure", "Relative Risk"))
+```
+
+> The risk of having a low-birth weight infant is 1.6 times higher for mothers who are smokers than non-smokers.
+The risk of having a low-birth weight infant is 1.98 times higher for mothers with hypertension than those without hypertension.
+The risk of having a low-birth weight infant is 1.39 times higher for mothers who did not attend any prenatal care visits at all. 
+The risk of having a low-birth weight infant is 0.98 times lower for mothers who are ages under 20. 
+
+## Endometrial Cancer
+
+The last part of the assignment uses the **bdendo** dataset from the **Epi** package. Below is a summary of 4 exposures for Endometrial Cancer:
+
+1. Hypertension status 
+
+> Odds Ratio: `r hypertension_status`
+The odds of a Endometrial Cancel case undergoing hypertension is 1.46 times higher than the odds of a case not undergoing hypertension.
+
+2. Obesity Status
+
+> Odds Ratio: `r obesity_status`
+The odds of a Endometrial Cancel case undergoing obesity is 1.67 times higher than the odds of a case not undergoing obesity.
+
+3. Gallbladder Disease
+
+> Odds Ratio: `r gallbladder_status`
+The odds of a Endometrial Cancel case having a gall bladder disease is 3.51 higher than the odds of a case not having gall bladder disease.
